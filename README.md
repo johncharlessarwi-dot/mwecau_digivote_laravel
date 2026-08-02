@@ -1,136 +1,87 @@
-# 🗳️ MWECAU DigiVote (Laravel v2)
+# MWECAU DigiVote (Laravel v2)
 
 [![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-00758F?logo=mysql)](https://www.mysql.com)
-[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue)](LICENSE)
 
-> Secure digital voting platform for Mwenge Catholic University student elections.
+Secure digital voting platform for Mwenge Catholic University student elections. **No queues. No paper. Just democracy.**
 
-**No queues. No paper. Just democracy.**
+┌─────────────────────────────────────────┐ │ MWECAU DigiVote │ │─────────────────────────────────────────│ │ [ Login with Reg Number ] │ │ │ │ Active Elections: │ │ ▸ Presidential Election [VOTE →] │ │ ▸ Residential Leadership [VOTE →] │ │ ▸ Course Representative [VOTE →] │ │ │ │ Your vote is anonymous & secure │ └─────────────────────────────────────────┘
 
----
+Code
 
-## Overview
+## What It Does
 
-MWECAU DigiVote is a secure, scalable, and modern electronic voting platform built with Laravel. It enables students to participate in university elections from anywhere while maintaining transparency, security, and voter anonymity.
-
-```text
-┌─────────────────────────────────────────┐
-│           MWECAU DigiVote               │
-│─────────────────────────────────────────│
-│     [ Login with Reg Number ]           │
-│                                         │
-│     Active Elections:                   │
-│     ▸ Presidential Election [VOTE →]    │
-│     ▸ Residential Leadership [VOTE →]   │
-│     ▸ Course Representative [VOTE →]    │
-│                                         │
-│     Your vote is anonymous & secure     │
-└─────────────────────────────────────────┘
-```
-
----
-
-## Features
-
-* Multi-level elections (Presidential, Residential, Course Representative)
-* Secure voting with JWT authentication and voter tokens
-* Anonymous vote casting
-* Self-service password recovery via email
-* Real-time election results
-* Mobile-friendly responsive design
-* Observer dashboard for election monitoring
-* Queue-based background processing
-* Redis caching support
-* <del> API support for future mobile applications </del>
-* Voter eligibility validation
-
----
+- **Multi-level elections** — Presidential, Residential, Course Representative
+- **Secure voting** — JWT + session auth, one-time voter tokens, tamper-proof voting
+- **Self-service password recovery** — Token-based reset links via email
+- **Real-time results** — Live vote counts with auto-refresh
+- **Vote from anywhere** — Students on campus or abroad
+- **Mobile responsive** — Works on all devices, optimized for touch
+- **High performance** — Queue-based background jobs, Redis caching
+- **Observer role** — Real-time results dashboard for election monitoring
 
 ## Tech Stack
 
-| Component      | Technology                               |
-| -------------- | ---------------------------------------- |
-| Framework      | Laravel 11 (PHP 8.2+)                    |
-| Database       | MySQL 8.0+                               |
-| Cache          | Redis                                    |
-| Queue          | Redis Queue Workers                      |
-| Frontend       | Blade Templates, Tailwind CSS, Alpine.js |
-| API            | REST API with Laravel Sanctum            |
-| Authentication | Laravel Auth + JWT                       |
-| Email          | Laravel Mailables + Queue                |
-| File Storage   | Local Storage / Amazon S3                |
-| Server         | Nginx + PHP-FPM                          |
-
----
+| Component | Technology |
+|-----------|-----------|
+| **Framework** | Laravel 11 (PHP 8.2+) |
+| **Database** | MySQL 8.0+ |
+| **Cache** | Redis |
+| **Queue** | Redis (Async jobs) |
+| **Frontend** | Blade Templates, Tailwind CSS, Alpine.js |
+| **API** | RESTful API with Sanctum (Token Auth) |
+| **Email** | Laravel Queue + Mailable |
+| **File Storage** | Local / S3 |
+| **Authentication** | Laravel Auth + JWT Tokens |
+| **Server** | Nginx + PHP-FPM |
 
 ## Architecture
 
-```mermaid
-graph TD
-    Internet --> Nginx
-    Nginx --> PHPFPM[PHP-FPM]
-    PHPFPM --> Laravel
-    Laravel --> MySQL
-    Laravel --> Redis
-    Laravel --> Queue[Queue Workers]
-```
+Internet │ Nginx ← reverse proxy, SSL, static files │ PHP-FPM ← Laravel 11 application server │ Laravel App ← Eloquent ORM, async jobs, JWT auth │ ╲ MySQL Redis ← sessions, cache, queue broker │ Queue Workers ← email, notifications (async)
 
-### Why This Stack?
+Code
 
-* Secure authentication and authorization
-* Eloquent ORM for database management
-* Queue workers for bulk email delivery
-* Redis caching for improved performance
-* Sanctum token authentication
-* Blade templating for fast server-side rendering
-
----
+**Why this stack:**
+- Laravel's built-in authentication and authorization
+- Eloquent ORM for clean database queries
+- Queue system for sending 5000+ voter emails in parallel batches
+- Redis for caching session data and vote counts
+- Sanctum for stateless JWT authentication
+- Blade templating for dynamic frontend rendering
 
 ## Election Scope
 
-| Election Type         | Eligible Voters                                                                              |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| Presidential          | All MWECAU students                                                                          |
-| Residential           | Students from Kifumbu, Mawela, Kwachange, White House, Moshi Mjini, and On-Campus residences |
-| Course Representative | Undergraduate, Postgraduate, and Diploma students                                            |
+| Type | Who Votes |
+|------|-----------|
+| Presidential | All MWECAU students |
+| Residential | Kifumbu, Mawela, Kwachange, White House, Moshi Mjini, On-Campus |
+| Course | All undergraduate, postgraduate and diploma programs |
 
----
+## Key URLs
 
-## Application Routes
+| Page | URL |
+|------|-----|
+| Home | `/` |
+| Login | `/login` |
+| Register | `/register` |
+| Forgot Password | `/password-reset` |
+| Dashboard | `/dashboard` |
+| Active Elections | `/elections` |
+| Cast Vote | `/elections/{id}/vote` |
+| Results | `/elections/{id}/results` |
+| Commissioner Panel | `/commissioner/dashboard` |
+| Observer Dashboard | `/observer/dashboard` |
+| Admin Panel | `/admin` |
 
-| Page                   | Route                     |
-| ---------------------- | ------------------------- |
-| Home                   | `/`                       |
-| Login                  | `/login`                  |
-| Register               | `/register`               |
-| Forgot Password        | `/password-reset`         |
-| Dashboard              | `/dashboard`              |
-| Elections              | `/elections`              |
-| Vote                   | `/elections/{id}/vote`    |
-| Results                | `/elections/{id}/results` |
-| Commissioner Dashboard | `/commissioner/dashboard` |
-| Observer Dashboard     | `/observer/dashboard`     |
-| Admin Panel            | `/admin`                  |
+## Setup — Local Development
 
----
-
-## Local Development Setup
-
-### Requirements
-
-* PHP 8.2+
-* Composer
-* MySQL 8.0+
-* Redis
-
-### Installation
+**Requirements:** PHP 8.2+, MySQL 8.0+, Redis, Composer
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/mwecauict-club/mwecau_digivote_laravel.git
-
 cd mwecau_digivote_laravel
 
 # Install dependencies
@@ -142,175 +93,163 @@ cp .env.example .env
 # Generate application key
 php artisan key:generate
 
-# Configure database credentials in .env
+# Configure database in .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=digivote
+DB_USERNAME=root
+DB_PASSWORD=your_password
 
 # Run migrations
 php artisan migrate
 
-# Seed database (optional)
+# Seed test data (optional)
 php artisan db:seed
 
-# Create storage symlink
+# Create symbolic link for storage
 php artisan storage:link
 
 # Start development server
 php artisan serve
-```
-
-Application will be available at:
-
-```text
-http://127.0.0.1:8000
-```
-
----
-
-## Production Deployment
-
-### Install Dependencies
-
-```bash
+Setup — Production (Nginx + PHP-FPM)
+bash
+# Install system dependencies
 sudo apt update
+sudo apt install php8.2-fpm php8.2-mysql php8.2-redis composer nginx mysql-server redis-server
 
-sudo apt install \
-php8.2-fpm \
-php8.2-mysql \
-php8.2-redis \
-composer \
-nginx \
-mysql-server \
-redis-server
-```
-
-### Deploy Application
-
-```bash
+# Clone and setup
 git clone https://github.com/mwecauict-club/mwecau_digivote_laravel.git /var/www/digivote
-
 cd /var/www/digivote
 
+# Install PHP dependencies
 composer install --optimize-autoloader --no-dev
 
+# Configure environment
 cp .env.example .env
+nano .env
+# Set: DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+# Set: CACHE_DRIVER=redis, QUEUE_CONNECTION=redis
 
-# Configure production environment variables
-
+# Generate key
 php artisan key:generate
 
+# Run migrations
 php artisan migrate --force
-
-php artisan storage:link
 
 # Set permissions
 sudo chown -R www-data:www-data /var/www/digivote
+sudo chmod -R 755 /var/www/digivote/storage /var/www/digivote/bootstrap/cache
 
-sudo chmod -R 755 storage bootstrap/cache
-```
+# Collect logs
+php artisan storage:link
 
----
+# Start Redis
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
 
-## User Roles
+# Configure Nginx (see nginx.conf example)
+sudo cp nginx.conf /etc/nginx/sites-available/digivote
+sudo ln -s /etc/nginx/sites-available/digivote /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
 
-| Role          | Description                                   |
-| ------------- | --------------------------------------------- |
-| Voter         | Participate in eligible elections             |
-| Candidate     | Manage campaign profile and contest elections |
-| Class Leader  | Manage voter registration data                |
-| Commissioner  | Manage elections, users, and analytics        |
-| Observer      | Read-only election monitoring                 |
-| Administrator | Full system management                        |
+# Start queue worker (systemd service or supervisor)
+php artisan queue:work redis --queue=default,email --tries=3
+User Roles
+Role	Permissions
+Voter	Login, vote in eligible elections, view personal results
+Candidate	Same as voter + manage campaign profile
+Class Leader	Upload/manage college student data for voter registration
+Commissioner	Full election management, user verification, analytics dashboard
+Observer	Read-only access to live results and election statistics
+Administrator	System administration, user management, database access
+Security
+✅ Registration number + password authentication
+✅ One-time voter tokens per election level (UUID-based, time-limited)
+✅ Vote anonymity — votes linked to tokens, not identities
+✅ Password reset via secure time-limited links (1-hour expiry)
+✅ Brute-force protection — 5 failed logins trigger 15-minute lockout
+✅ CSRF protection on all state-changing requests (Laravel token)
+✅ Rate limiting on API endpoints via Laravel throttle middleware
+✅ Security headers — HSTS, X-Frame-Options, Content-Type-Nosniff
+✅ JWT tokens with short expiry times (15 minutes)
+✅ Sanctum-based API authentication
+Database Schema
+Key tables:
 
----
-
-## Security Features
-
-* Registration Number + Password Authentication
-* JWT-based authentication
-* One-time voting tokens
-* Anonymous ballot storage
-* Secure password reset links
-* Brute-force protection
-* CSRF protection
-* Rate limiting
-* Security headers (HSTS, CSP, etc.)
-* Short-lived access tokens
-* Sanctum API authentication
-
----
-
-## Database Schema
-
-### Core Tables
-
-| Table           | Purpose                  |
-| --------------- | ------------------------ |
-| users           | System users and voters  |
-| elections       | Election information     |
-| candidates      | Election candidates      |
-| votes           | Anonymous ballot records |
-| voter_tokens    | One-time voting tokens   |
-| password_resets | Password recovery        |
-| login_attempts  | Brute-force monitoring   |
-
----
-
-## Project Structure
-
-```text
+users — Voters and system users
+elections — Election metadata
+candidates — Candidates per election
+votes — Ballot records (anonymized)
+voter_tokens — One-time tokens (one per election level, per user)
+password_resets — Token-based password recovery
+login_attempts — Brute-force tracking
+Features to Build
+ User registration & authentication (Reg Number + Password)
+ Multi-level election creation & management
+ Candidate nomination & profile management
+ Vote casting with one-time token validation
+ Real-time results dashboard (30-second refresh)
+ Password reset via email
+ Commissioner election analytics panel
+ Observer read-only results view
+ Admin user & election management
+ Async email queuing (5000+ emails in batches)
+ API endpoints for mobile/external clients
+ Voter eligibility validation
+ Vote audit trail (anonymized)
+ Mobile-responsive Blade templates
+ Brute-force login protection
+ Rate limiting & API throttling
+Deployment Checklist
+ Set APP_DEBUG=false in production
+ Configure .env with production credentials
+ Enable Redis caching and queue
+ Set up MySQL daily backups
+ Configure SSL/TLS with Let's Encrypt
+ Enable HTTPS only (redirect HTTP → HTTPS)
+ Set up log rotation
+ Configure queue worker as systemd service
+ Enable firewall rules (allow 80, 443 only)
+ Set up monitoring & alerts
+ Test email delivery
+ Create database backups before migrations
+Key Files & Directories
+Code
 mwecau_digivote_laravel/
 ├── app/
-│   ├── Models/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   └── Middleware/
-│   ├── Mail/
-│   └── Jobs/
+│   ├── Models/              # Eloquent models
+│   ├── Http/Controllers/    # Request handlers
+│   ├── Http/Middleware/     # Custom middleware
+│   ├── Mail/                # Mailable classes
+│   └── Jobs/                # Queued jobs
 ├── database/
-│   ├── migrations/
-│   └── seeders/
+│   ├── migrations/          # Schema definitions
+│   └── seeders/             # Test data
 ├── resources/
-│   ├── views/
-│   └── css/
+│   ├── views/               # Blade templates
+│   └── css/                 # Tailwind + custom styles
 ├── routes/
-│   ├── web.php
-│   └── api.php
+│   ├── web.php              # Web routes
+│   └── api.php              # API routes
 ├── config/
-├── storage/
-├── bootstrap/
-├── .env.example
-├── nginx.conf
-└── docker-compose.yml
-```
+│   ├── app.php              # App configuration
+│   ├── database.php         # DB config
+│   └── queue.php            # Queue config
+├── storage/                 # Uploads & logs
+├── .env.example             # Environment template
+├── nginx.conf               # Nginx configuration
+└── docker-compose.yml       # Docker setup (optional)
+Contributing
+See CONTRIBUTING.md for guidelines.
 
----
+Team
+Cleven — Project Manager & Lead Developer
+Lajokjohn — Technical Lead
+Faustine Emmanuel — Feature Developer
+MWECAU ICT Club — Institution
+License
+This project is licensed under the GNU General Public License v3.0 — see LICENSE file.
 
-## Contributing
-
-Contributions are welcome.
-
-Please read:
-
-```text
-CONTRIBUTING.md
-```
-
-before submitting issues or pull requests.
-
----
-
-
-## License
-
-This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
-
-See the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-**© 2026 MWECAU ICT Club**
-
-*One vote at a time.*
-
-</div>
+© 2026 MWECAU ICT Club · One vote at a time.
