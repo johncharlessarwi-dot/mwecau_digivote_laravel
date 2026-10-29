@@ -253,3 +253,12 @@ License
 This project is licensed under the GNU General Public License v3.0 — see LICENSE file.
 
 © 2026 MWECAU ICT Club · One vote at a time.
+
+---
+
+## Project maintainer
+
+MWECAU DigiVote is maintained in this public project portfolio by [John Charles Sarwi](https://john-charles-sarwi-portfolio.vercel.app/), a Computer Science undergraduate and software developer in Tanzania.
+
+- **Developer portfolio:** https://john-charles-sarwi-portfolio.vercel.app/
+- **GitHub profile:** https://github.com/johncharlessarwi-dot
