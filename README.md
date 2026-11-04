@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/readme/project-motion.svg" width="100%" alt="MWECAU DIGIVOTE LARAVEL animated overview banner" />
+</div>
+
 # MWECAU DigiVote (Laravel v2)
 
 [![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel)](https://laravel.com)
