@@ -10,6 +10,8 @@
 
 # MWECAU DigiVote (Laravel v2)
 
+> **Repository status — documentation-only snapshot.** The current branch does not contain a `composer.json`, `artisan` entrypoint, Laravel `app/`, database migrations or test suite. The architecture, features and setup commands below describe intended functionality and **cannot be verified or run from this checkout**. Do not use this snapshot to run a binding election. Obtain and independently review authorized application source, audit ballot privacy and voter eligibility, and run security and load tests before deploying.
+
 [![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?logo=laravel)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-00758F?logo=mysql)](https://www.mysql.com)
