@@ -1,0 +1,41 @@
+name: Navigation checks
+on:
+  pull_request:
+    paths:
+      - "index.html"
+      - ".github/workflows/navigation.yml"
+permissions:
+  contents: read
+jobs:
+  navigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python -m pip install playwright==1.55.0
+      - name: Exercise navigation across four viewport sizes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.parse import urlparse
+          from playwright.sync_api import sync_playwright
+          root = Path.cwd()
+          with sync_playwright() as engine:
+              browser = engine.chromium.launch(executable_path="/usr/bin/google-chrome")
+              for width, height in [(320, 568), (568, 320), (768, 1024), (1440, 900)]:
+                  page = browser.new_page(viewport={"width": width, "height": height})
+                  page.goto((root / "index.html").as_uri())
+                  links = page.locator("main nav a")
+                  assert links.count() >= 2
+                  for link in links.all():
+                      link.click(trial=True)
+                      box = link.bounding_box()
+                      assert box["x"] >= 0 and box["x"] + box["width"] <= width
+                      url = urlparse(link.get_attribute("href"))
+                      if "/blob/main/" in url.path:
+                          assert (root / url.path.split("/blob/main/", 1)[1]).is_file()
+                  page.close()
+              browser.close()
+          PY
